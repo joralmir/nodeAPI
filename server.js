@@ -4,6 +4,7 @@ var express = require('express'),
   mongoose = require('mongoose'),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser'),
+  cors = require('cors'),
   routes = require('./api/routes/route'),
   configuration = require('./configuration/configuration'),
   logger = require('morgan');
@@ -13,8 +14,13 @@ var express = require('express'),
   // var jwtauth = require("./middlewares/jwtauth");
   var logger = require("./middlewares/logger");
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+logger.debug("Overriding 'Express' logger");
+app.use(require('morgan')("combined",{ "stream": logger.stream }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', routes);
 
