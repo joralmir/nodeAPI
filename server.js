@@ -20,7 +20,6 @@ app.use(require('morgan')("combined",{ "stream": logger.stream }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', routes);
 
