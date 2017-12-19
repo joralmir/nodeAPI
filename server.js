@@ -5,22 +5,27 @@ var express = require('express'),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser'),
   routes = require('./api/routes/route'),
-  configuration = require('./configuration/configuration');
+  configuration = require('./configuration/configuration'),
+  logger = require('morgan');
 
+  // Custom MIDDLEWARES Import === jwauth && Winston Debugger
+  //var config = require("./configuration/configuration");
+  // var jwtauth = require("./middlewares/jwtauth");
+  var logger = require("./middlewares/logger");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use('/api', routes)
+app.use('/api', routes);
 
 app.listen(port);
-console.log('Server listening on: ' + port);
+logger.debug('Server listening on: ' + port);
 
 app.use(function(req, res) {
-  res.status(404).send({url: req.originalUrl + ' not found'})
+  res.status(404).send({url: req.originalUrl + ' not found'});
 });
 
 // mongoose instance connection url connection
 mongoose.Promise = global.Promise;
 mongoose.connect(configuration.mongoUrl, {useMongoClient: true});
-console.log('MONGO dB connection established...');
+logger.debug('MONGO dB connection established...');
